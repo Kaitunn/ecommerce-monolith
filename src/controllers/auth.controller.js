@@ -13,9 +13,7 @@ export const register = async (req, res) => {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: {
-        username,
-      },
+      where: { username },
     });
 
     if (existingUser) {
@@ -25,15 +23,11 @@ export const register = async (req, res) => {
     }
 
     const userRole = await prisma.role.findUnique({
-      where: {
-        rolename: "USER",
-      },
+      where: { rolename: "normal" },
     });
 
     const standardMembership = await prisma.membership.findUnique({
-      where: {
-        mname: "STANDARD",
-      },
+      where: { mname: "STANDARD" },
     });
 
     if (!userRole || !standardMembership) {
@@ -57,9 +51,7 @@ export const register = async (req, res) => {
         username: true,
         fullname: true,
         role: {
-          select: {
-            rolename: true,
-          },
+          select: { rolename: true },
         },
         membership: {
           select: {
@@ -94,9 +86,7 @@ export const login = async (req, res) => {
     }
 
     const user = await prisma.user.findUnique({
-      where: {
-        username,
-      },
+      where: { username },
       include: {
         role: true,
         membership: true,
@@ -158,17 +148,13 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
-      where: {
-        uid: req.user.uid,
-      },
+      where: { uid: req.user.uid },
       select: {
         uid: true,
         username: true,
         fullname: true,
         role: {
-          select: {
-            rolename: true,
-          },
+          select: { rolename: true },
         },
         membership: {
           select: {
@@ -185,9 +171,7 @@ export const getMe = async (req, res) => {
       });
     }
 
-    return res.status(200).json({
-      user,
-    });
+    return res.status(200).json({ user });
   } catch (error) {
     console.error("Get me error:", error);
 

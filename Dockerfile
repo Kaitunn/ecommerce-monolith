@@ -9,7 +9,7 @@ RUN npm ci
 COPY prisma ./prisma
 COPY prisma7.config.ts ./
 
-RUN npx prisma generate
+RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" npx prisma generate
 
 COPY src ./src
 
